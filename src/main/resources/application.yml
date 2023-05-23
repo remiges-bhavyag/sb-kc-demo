@@ -1,0 +1,29 @@
+server:
+  port: 8090                                  ## Spring boot app Server port
+
+spring:
+  application:
+    name: springboot-keycloak                 ## Spring boot app name
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.auth-server-url}realms/${keycloak.realm}                                     ## Do Not Change
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs  ## Do Not Change
+
+jwt:
+  auth:
+    converter:
+      resource-id: ${keycloak.resource}       ## Do Not Change
+      principal-attribute: preferred_username ## Do Not Change
+      use-realm-role: false                   ## TRUE(If you want to use REALM ROLES). FALSE(If you want to use keycloak client level roles) 
+
+keycloak:
+  realm: myrealm                              ## Keycloak Realm name
+  auth-server-url: http://localhost:8080/     ## Keycloak server URL. Ensure "/" at end of URL
+  ssl-required: external                      ## Do Not Change
+  resource: myclient-sb                       ## Keycloak Client Name
+  credentials:
+    secret: EvP10E952ivNyy6MeCpBWGjJciPEQjQV  ## Keycloak Client Secret
+  use-resource-role-mappings: true            ## Do Not Change
+  bearer-only: true                           ## Do Not Change
