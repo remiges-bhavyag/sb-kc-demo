@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "90295b80-f509-43f1-a4ef-87f939cc8d12",
+		"name": "Keycloak-Merce Way",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"refresh_token_admin\", jsonData.refresh_token);",
+							"postman.setEnvironmentVariable(\"access_token_admin\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "myclient-sb",
+							"type": "default"
+						},
+						{
+							"key": "client_secret",
+							"value": "EvP10E952ivNyy6MeCpBWGjJciPEQjQV",
+							"type": "default"
+						},
+						{
+							"key": "username",
+							"value": "myadminuser@merce.co",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "mailpass",
+							"type": "default"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "default"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/realms/myrealm/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"myrealm",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer {{access_token_admin}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/test/admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"test",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all-user from admin",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer {{access_token_admin}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/test/all-user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"test",
+						"all-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"refresh_token_user\", jsonData.refresh_token);",
+							"postman.setEnvironmentVariable(\"access_token_user\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "myclient-sb",
+							"type": "default"
+						},
+						{
+							"key": "username",
+							"value": "myuser@merce.co",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "mailpass",
+							"type": "default"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "default"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "default"
+						},
+						{
+							"key": "client_secret",
+							"value": "EvP10E952ivNyy6MeCpBWGjJciPEQjQV",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/realms/myrealm/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"myrealm",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer {{access_token_user}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/test/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"test",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all-user from user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer {{access_token_user}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/test/all-user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"test",
+						"all-user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
