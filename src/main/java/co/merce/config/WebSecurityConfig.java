@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -15,45 +17,33 @@ public class WebSecurityConfig {
 
 	private final JwtAuthConverter jwtAuthConverter;
 
-	public WebSecurityConfig(JwtAuthConverter jwtAuthConverter) {
+	private final KeycloakProperties kp;
+	
+	public WebSecurityConfig(JwtAuthConverter jwtAuthConverter, KeycloakProperties keycloakProperties) {
 		this.jwtAuthConverter = jwtAuthConverter;
+		this.kp=keycloakProperties;
 	}
 	
 	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		/*
-		 * Authorization parameters to HTTP requests
-		 */
-		 
-		http.authorizeHttpRequests()
-				/*
-				 * We can set Global Request-Role Matchers here. Following are some of the examples.
-				 */
-				// .requestMatchers(HttpMethod.GET, "/test/anonymous", "/test/anonymous/**").permitAll()
-				// .requestMatchers(HttpMethod.GET, "/test/admin", "/test/admin/**").hasRole("admin")
-				// .requestMatchers(HttpMethod.GET, "/test/user").hasAnyRole("user", "admin")
-		
-				/*
-				 * Alternatively, these can be set directly on the methods. In case you want to
-				 * use Roles defined on methods, then you have to add @EnableMethodSecurity
-				 * annotation
-				 */
-				.anyRequest().authenticated();
-
-		/*
-		 * Add JWT Auth Converter to extract the Roles from JWT
-		 */
-		http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
-
-		/*
-		 * Set HTTP session management policy
-		 */
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-		/*
-		 * Return the HTTP object
-		 */
-		return http.build();
-	}
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(requests -> requests.anyRequest().authenticated());
+        http.oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
+                );
+        http.sessionManagement(sessionManagement ->
+			sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				//.sessionConcurrency(sessionConcurrency ->
+				//	sessionConcurrency
+				//		.maximumSessions(1)
+				//		.expiredUrl("/login?expired")
+				//)
+		);
+        return http.build();
+    }
 	
+	@Bean
+	JwtDecoder jwtDecoder() {
+		String jwkSetUri=kp.getAuthServerUrl()+"realms/"+kp.getRealm()+"/protocol/openid-connect/certs";
+	    return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+	}
 }
