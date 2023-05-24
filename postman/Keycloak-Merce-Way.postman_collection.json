@@ -14,7 +14,14 @@
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"refresh_token_admin\", jsonData.refresh_token);",
-							"postman.setEnvironmentVariable(\"access_token_admin\", jsonData.access_token);"
+							"postman.setEnvironmentVariable(\"access_token_admin\", jsonData.access_token);",
+							"",
+							"pm.test(\"response should be okay for Auth admin\", function () {",
+							"    //console.log(\"text--\"+pm.response.body.console)",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.not.have.jsonBody(\"error\");",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -81,6 +88,23 @@
 		},
 		{
 			"name": "admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay for admin\", function () {",
+							"    //console.log(\"text--\"+pm.response.body.console)",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.body(\"Hello from method Admin To User myadminuser\");",
+							"    pm.response.to.not.have.jsonBody(\"error\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -107,6 +131,23 @@
 		},
 		{
 			"name": "all-user from admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay for admin and user\", function () {",
+							"    //console.log(\"text--\"+pm.response.body.console)",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.body(\"Hello from method All User to User myadminuser\");",
+							"    pm.response.to.not.have.jsonBody(\"error\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -140,7 +181,14 @@
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"refresh_token_user\", jsonData.refresh_token);",
-							"postman.setEnvironmentVariable(\"access_token_user\", jsonData.access_token);"
+							"postman.setEnvironmentVariable(\"access_token_user\", jsonData.access_token);",
+							"",
+							"pm.test(\"response should be okay for Auth User\", function () {",
+							"    //console.log(\"text--\"+pm.response.body.console)",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.not.have.jsonBody(\"error\");",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -207,6 +255,23 @@
 		},
 		{
 			"name": "User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay for user\", function () {",
+							"    //console.log(\"text--\"+pm.response.body.console)",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.body(\"Hello form method User to User myuser\");",
+							"    pm.response.to.not.have.jsonBody(\"error\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
@@ -233,6 +298,23 @@
 		},
 		{
 			"name": "all-user from user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay for admin and user\", function () {",
+							"    //console.log(\"text--\"+pm.response.body.console)",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.have.body(\"Hello from method All User to User myuser\");",
+							"    pm.response.to.not.have.jsonBody(\"error\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [
