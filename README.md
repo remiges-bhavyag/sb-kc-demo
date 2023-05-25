@@ -714,7 +714,7 @@ We’ll use this access_token to our request to endpoint “/user”<br>
 
 We’ll get Forbidden error for endpoint “/admin”<br>
 
-    ![39](https://github.com/merce-bhavyag/sb-kc-demo/assets/121023504/8c4272f5-2e5f-4f0c-a066-2f1dbd5878cb)
+   ![39](https://github.com/merce-bhavyag/sb-kc-demo/assets/121023504/8c4272f5-2e5f-4f0c-a066-2f1dbd5878cb)
 
 <br>
 
