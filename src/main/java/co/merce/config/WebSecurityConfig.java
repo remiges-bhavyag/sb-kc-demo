@@ -1,8 +1,11 @@
 package co.merce.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -20,9 +26,12 @@ public class WebSecurityConfig {
 
 	private final KeycloakProperties kp;
 	
-	public WebSecurityConfig(JwtAuthConverter jwtAuthConverter, KeycloakProperties keycloakProperties) {
+	private final ApplicationProperties app;
+	
+	public WebSecurityConfig(JwtAuthConverter jwtAuthConverter, KeycloakProperties keycloakProperties, ApplicationProperties app) {
 		this.jwtAuthConverter = jwtAuthConverter;
 		this.kp=keycloakProperties;
+		this.app=app;
 	}
 	
 	@Bean
@@ -65,10 +74,24 @@ public class WebSecurityConfig {
 				//)
 		);
         /*
+         * Enable CORS
+         */
+        http.cors(withDefaults());
+        /*
          * Return the HTTP object
          */
         return http.build();
     }
+	
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList(app.getCorsAllowedOrigin().split(",")));
+		configuration.setAllowedMethods(Arrays.asList(app.getCorsAllowedMethods().split(",")));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 	
 	@Bean
 	JwtDecoder jwtDecoder() {

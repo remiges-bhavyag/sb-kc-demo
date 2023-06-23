@@ -27,3 +27,7 @@ keycloak:
     secret: EvP10E952ivNyy6MeCpBWGjJciPEQjQV  ## Keycloak Client Secret
   use-resource-role-mappings: true            ## Do Not Change
   bearer-only: true                           ## Do Not Change
+
+application:
+  corsAllowedOrigin: http://localhost:4200,http://localhost:4100
+  corsAllowedMethods: GET,POST
